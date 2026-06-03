@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Para Enzo 💌</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Poppins:wght@300;400;500&family=Special+Elite&display=swap" rel="stylesheet">
+
+<!-- 🎵 Música de fundo - descomente e adicione a URL do seu arquivo de áudio -->
+<!--
+<audio id="bg-music" loop autoplay>
+  <source src="SUA_MUSICA_AQUI.mp3" type="audio/mpeg">
+</audio>
+-->
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --crimson: #8B0000;
+    --wine: #4A0404;
+    --deep: #2a0202;
+    --rose: #e8a0a0;
+    --blush: #f5c5c5;
+    --gold: #d4a55a;
+    --cream: #fff8f0;
+    --white: #ffffff;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+    background: var(--wine);
+    cursor: default;
+    touch-action: manipulation;
+  }
+
+  /* ===================== SCREENS ===================== */
+  .screen {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.9s ease;
+    overflow: hidden;
+  }
+  .screen.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ===================== PARTICLES / CANVAS ===================== */
+  #particle-canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===================== SCREEN 1 — PRESENT ===================== */
+  #screen1 {
+    background: radial-gradient(ellipse at center, #6b0000 0%, #3a0202 60%, #1a0101 100%);
+    flex-direction: column;
+    gap: 30px;
+    z-index: 10;
+  }
+
+  .gift-wrapper {
+    position: relative;
+    cursor: pointer;
+    transform: translateY(0);
+    animation: float 3s ease-in-out infinite;
+    transition: transform 0.3s;
+    user-select: none;
+  }
+  .gift-wrapper:hover { transform: scale(1.05) translateY(-8px); }
+  .gift-wrapper:active { transform: scale(0.97); }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-14px); }
+  }
+
+  .gift-wrapper.opening {
+    animation: giftOpen 0.7s ease-in-out forwards !important;
+  }
+  @keyframes giftOpen {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.15) rotate(-3deg); }
+    60%  { transform: scale(0.9) rotate(2deg); }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+
+  .gift-label {
+    font-family: 'Great Vibes', cursive;
+    color: var(--white);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    text-align: center;
+    text-shadow: 0 2px 20px rgba(255,100,100,0.6);
+    letter-spacing: 2px;
+    animation: fadeInUp 1.2s ease 0.4s both;
+  }
+
+  .sparkle-ring {
+    position: absolute;
+    inset: -30px;
+    pointer-events: none;
+  }
+  .sparkle-ring span {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: sparkleOrbit 4s linear infinite;
+  }
+  .sparkle-ring span:nth-child(1)  { top:0; left:50%; animation-delay:0s; }
+  .sparkle-ring span:nth-child(2)  { top:14%; left:86%; animation-delay:0.5s; }
+  .sparkle-ring span:nth-child(3)  { top:50%; left:100%; animation-delay:1s; }
+  .sparkle-ring span:nth-child(4)  { top:86%; left:86%; animation-delay:1.5s; }
+  .sparkle-ring span:nth-child(5)  { top:100%; left:50%; animation-delay:2s; }
+  .sparkle-ring span:nth-child(6)  { top:86%; left:14%; animation-delay:2.5s; }
+  .sparkle-ring span:nth-child(7)  { top:50%; left:0; animation-delay:3s; }
+  .sparkle-ring span:nth-child(8)  { top:14%; left:14%; animation-delay:3.5s; }
+
+  @keyframes sparkleOrbit {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* ===================== SCREEN 2 — FLOWERS EXPLOSION ===================== */
+  #screen2 {
+    background: radial-gradient(ellipse at center, #ff9eaa 0%, #d43f5c 40%, #8B0000 100%);
+    z-index: 9;
+    flex-direction: column;
+  }
+  #screen2 .boom-text {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(3rem, 10vw, 7rem);
+    color: white;
+    text-shadow: 0 4px 30px rgba(255,50,50,0.8);
+    animation: boomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    position: relative;
+    z-index: 2;
+  }
+  @keyframes boomIn {
+    from { transform: scale(0) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);  opacity: 1; }
+  }
+
+  /* ===================== SCREEN 3 — FAVORITE PERSON ===================== */
+  #screen3 {
+    background: radial-gradient(ellipse 120% 120% at 60% 40%, #6b0000 0%, #3a0202 50%, #1e0101 100%);
+    z-index: 8;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .scrapbook-layout {
+    position: relative;
+    width: 100%; height: 100%;
+    overflow: hidden;
+  }
+
+  /* TITLE */
+  .s3-title {
+    position: absolute;
+    top: 5%;
+    right: 3%;
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    color: var(--white);
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.3), 0 0 40px rgba(255,100,100,0.5);
+    transform: rotate(-2deg);
+    animation: fadeInUp 1s ease 0.2s both;
+    z-index: 5;
+  }
+
+  /* BEARS */
+  .bears-center {
+    position: absolute;
+    left: 3%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: clamp(160px, 35%, 280px);
+    animation: fadeInLeft 1s ease 0.4s both;
+    z-index: 5;
+    filter: drop-shadow(4px 8px 20px rgba(0,0,0,0.5));
+  }
+
+  /* LEOPARD STARS */
+  .leopard-star {
+    position: absolute;
+    z-index: 4;
+  }
+  .leopard-star svg {
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.4));
+  }
+  .star-tl { top: 2%; left: 1%; width: clamp(70px,14vw,130px); animation: fadeInDown 1s ease 0.6s both; }
+  .star-tr { top: 2%; right: 1%; width: clamp(60px,12vw,110px); animation: fadeInDown 1s ease 0.7s both; }
+  .star-bl { bottom: 3%; left: 1%; width: clamp(70px,14vw,130px); animation: fadeInUp 1s ease 0.8s both; }
+
+  /* POLAROID */
+  .polaroid-frame {
+    position: absolute;
+    bottom: 4%;
+    right: 2%;
+    background: white;
+    padding: 10px 10px 35px 10px;
+    box-shadow: 3px 8px 30px rgba(0,0,0,0.5);
+    transform: rotate(3deg);
+    animation: fadeInRight 1s ease 0.5s both;
+    z-index: 6;
+    width: clamp(100px, 22vw, 180px);
+  }
+  .polaroid-frame img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+    background: #ddd url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e8c0c0'/%3E%3Ctext x='50' y='52' text-anchor='middle' font-size='11' fill='%238B0000' font-family='sans-serif'%3ESua foto%3C/text%3E%3Ctext x='50' y='65' text-anchor='middle' font-size='9' fill='%238B0000' font-family='sans-serif'%3Eaqui 💕%3C/text%3E%3C/svg%3E") center/cover;
+  }
+  .polaroid-caption {
+    text-align: center;
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(0.6rem, 1.5vw, 0.8rem);
+    color: #444;
+    margin-top: 6px;
+  }
+
+  /* FLOATING HEARTS & FLOWERS scattered */
+  .scatter-item {
+    position: absolute;
+    pointer-events: none;
+    z-index: 3;
+    animation: floatGently 5s ease-in-out infinite;
+  }
+  @keyframes floatGently {
+    0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); }
+    50% { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) + 5deg)); }
+  }
+
+  /* NEXT BUTTON */
+  .next-btn {
+    position: absolute;
+    bottom: 3%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 24px;
+    border-radius: 30px;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+    z-index: 10;
+    letter-spacing: 1px;
+  }
+  .next-btn:hover { background: rgba(255,255,255,0.3); transform: translateX(-50%) scale(1.05); }
+
+  /* ===================== SCREEN 4 — LETTER ===================== */
+  #screen4 {
+    background: var(--wine);
+    z-index: 7;
+    padding: 0;
+    align-items: stretch;
+    justify-content: stretch;
+  }
+
+  .letter-layout {
+    display: flex;
+    width: 100%; height: 100%;
+    position: relative;
+  }
+
+  /* Paper side */
+  .letter-paper {
+    flex: 1.1;
+    background:
+      repeating-linear-gradient(transparent, transparent 27px, rgba(80,80,80,0.2) 28px),
+      linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 50%, #222 100%);
+    padding: clamp(20px, 5vw, 60px) clamp(16px, 4vw, 50px);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    border-right: 3px solid rgba(255,255,255,0.05);
+  }
+
+  /* Wax seal */
+  .wax-seal {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: clamp(50px, 10vw, 75px);
+    height: clamp(50px, 10vw, 75px);
+    background: radial-gradient(circle at 40% 35%, #c0392b, #7b241c);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 4px 15px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.3);
+    animation: sealAppear 1s cubic-bezier(0.175,0.885,0.32,1.275) 0.5s both;
+  }
+  .wax-seal span {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: rgba(255,255,255,0.9);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+  }
+  @keyframes sealAppear {
+    from { transform: scale(0) rotate(-180deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .letter-from {
+    font-family: 'Special Elite', cursive;
+    color: rgba(255,255,255,0.5);
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    letter-spacing: 2px;
+  }
+
+  .letter-body {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(0.95rem, 2.2vw, 1.25rem);
+    color: rgba(255,255,255,0.92);
+    line-height: 1.9;
+    font-weight: 400;
+    animation: fadeInUp 1.2s ease 0.3s both;
+  }
+  .letter-body .dear { font-size: 1.3em; font-weight: 700; color: var(--blush); }
+  .letter-body .sign { margin-top: 20px; font-size: 1.15em; color: var(--rose); }
+
+  /* Collage side */
+  .letter-collage {
+    flex: 0.9;
+    position: relative;
+    background: radial-gradient(ellipse at center, #5a0000 0%, #2a0101 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .bouquet-container {
+    position: relative;
+    z-index: 2;
+    animation: fadeInRight 1.2s ease 0.4s both;
+    width: 80%;
+    max-width: 240px;
+  }
+
+  .collage-star-big {
+    position: absolute;
+    top: 5%;
+    right: 5%;
+    width: clamp(60px, 15vw, 100px);
+    z-index: 3;
+    animation: spin 20s linear infinite;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+  .l4-next-btn {
+    position: absolute;
+    bottom: 3%;
+    right: 3%;
+    z-index: 10;
+  }
+
+  /* ===================== SCREEN 5 — CATS ===================== */
+  #screen5 {
+    background: radial-gradient(ellipse at center, #700000 0%, #3a0202 50%, #1a0101 100%);
+    z-index: 6;
+    flex-direction: column;
+    gap: clamp(10px, 3vw, 25px);
+    padding: 20px;
+  }
+
+  .cats-container {
+    position: relative;
+    animation: fadeInUp 1.2s ease 0.2s both;
+  }
+
+  .s5-title-box {
+    border: 3px solid var(--rose);
+    border-radius: 4px;
+    padding: 12px 28px;
+    position: relative;
+    animation: fadeInUp 1.2s ease 0.4s both;
+    background: rgba(0,0,0,0.3);
+  }
+  .s5-title-box::before, .s5-title-box::after {
+    content: '';
+    position: absolute;
+    top: 4px; bottom: 4px; left: 4px; right: 4px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    pointer-events: none;
+  }
+  .s5-main-text {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(1.1rem, 3.5vw, 2rem);
+    color: var(--blush);
+    letter-spacing: 3px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .s5-sub {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    color: rgba(255,255,255,0.6);
+    animation: fadeInUp 1.2s ease 0.6s both;
+    text-align: center;
+  }
+
+  .s5-hearts {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  /* ===================== UTILITIES ===================== */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInLeft {
+    from { opacity: 0; transform: translateX(-40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes fadeInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 600px) {
+    .letter-layout { flex-direction: column; }
+    .letter-collage { flex: 0 0 40%; min-height: 200px; }
+    .letter-paper { flex: 1; border-right: none; border-bottom: 3px solid rgba(255,255,255,0.05); }
+    .s3-title { font-size: clamp(2rem, 9vw, 4rem); top: 3%; right: 2%; }
+    .bears-center { top: auto; bottom: 22%; transform: none; left: 2%; }
+    .polaroid-frame { width: 100px; }
+    .star-tr { display: none; }
+    .collage-star-big { width: 55px; }
+    .wax-seal { top: 10px; right: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+
+<!-- ============================================================
+     SCREEN 1 — PRESENT
+     ============================================================ -->
+<div id="screen1" class="screen active">
+  <div class="gift-wrapper" id="giftBox">
+    <div class="sparkle-ring">
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <!-- SVG Gift Box -->
+    <svg width="220" height="240" viewBox="0 0 220 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Box shadow -->
+      <ellipse cx="110" cy="235" rx="80" ry="8" fill="rgba(0,0,0,0.3)"/>
+      <!-- Box body -->
+      <rect x="20" y="100" width="180" height="130" rx="4" fill="#f5f5f0"/>
+      <rect x="20" y="100" width="180" height="130" rx="4" fill="url(#boxGrad)"/>
+      <!-- Box lid -->
+      <rect x="10" y="78" width="200" height="32" rx="4" fill="#efefea"/>
+      <rect x="10" y="78" width="200" height="32" rx="4" fill="url(#lidGrad)"/>
+      <!-- Vertical ribbon on body -->
+      <rect x="98" y="100" width="24" height="130" fill="url(#ribbonV)"/>
+      <!-- Horizontal ribbon on lid -->
+      <rect x="10" y="86" width="200" height="16" fill="url(#ribbonH)"/>
+      <!-- Bow left loop -->
+      <ellipse cx="78" cy="62" rx="30" ry="18" fill="url(#bowRed)" transform="rotate(-20,78,62)"/>
+      <ellipse cx="78" cy="62" rx="30" ry="18" fill="rgba(0,0,0,0.08)" transform="rotate(-20,78,62)"/>
+      <!-- Bow right loop -->
+      <ellipse cx="142" cy="62" rx="30" ry="18" fill="url(#bowRed2)" transform="rotate(20,142,62)"/>
+      <ellipse cx="142" cy="62" rx="30" ry="18" fill="rgba(0,0,0,0.08)" transform="rotate(20,142,62)"/>
+      <!-- Bow center knot -->
+      <ellipse cx="110" cy="72" rx="14" ry="10" fill="url(#bowKnot)"/>
+      <!-- Highlights -->
+      <ellipse cx="50" cy="115" rx="8" ry="5" fill="rgba(255,255,255,0.25)" transform="rotate(-10,50,115)"/>
+      <ellipse cx="165" cy="112" rx="6" ry="4" fill="rgba(255,255,255,0.15)" transform="rotate(15,165,112)"/>
+      <defs>
+        <linearGradient id="boxGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f0f0eb"/>
+          <stop offset="100%" stop-color="#ddddd8"/>
+        </linearGradient>
+        <linearGradient id="lidGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f8f8f3"/>
+          <stop offset="100%" stop-color="#e8e8e3"/>
+        </linearGradient>
+        <linearGradient id="ribbonV" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#9b0000"/>
+          <stop offset="45%" stop-color="#cc0000"/>
+          <stop offset="100%" stop-color="#9b0000"/>
+        </linearGradient>
+        <linearGradient id="ribbonH" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#cc0000"/>
+          <stop offset="100%" stop-color="#9b0000"/>
+        </linearGradient>
+        <radialGradient id="bowRed" cx="50%" cy="40%">
+          <stop offset="0%" stop-color="#e00000"/>
+          <stop offset="100%" stop-color="#8B0000"/>
+        </radialGradient>
+        <radialGradient id="bowRed2" cx="50%" cy="40%">
+          <stop offset="0%" stop-color="#d50000"/>
+          <stop offset="100%" stop-color="#7b0000"/>
+        </radialGradient>
+        <radialGradient id="bowKnot" cx="50%" cy="35%">
+          <stop offset="0%" stop-color="#ff2020"/>
+          <stop offset="100%" stop-color="#9b0000"/>
+        </radialGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="gift-label">For Enzo</div>
+</div>
+
+<!-- ============================================================
+     SCREEN 2 — FLOWERS EXPLOSION
+     ============================================================ -->
+<div id="screen2" class="screen">
+  <div id="flowerBoom" style="position:absolute;inset:0;pointer-events:none;"></div>
+  <div class="boom-text" id="boomText" style="display:none;">✿ Com amor ✿</div>
+</div>
+
+<!-- ============================================================
+     SCREEN 3 — FAVORITE PERSON
+     ============================================================ -->
+<div id="screen3" class="screen">
+  <div class="scrapbook-layout">
+
+    <!-- Title -->
+    <div class="s3-title">Favorite person</div>
+
+    <!-- Leopard Stars -->
+    <div class="leopard-star star-tl"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><polygon points="60,5 73,42 112,42 81,65 93,102 60,80 27,102 39,65 8,42 47,42" fill="url(#leo1)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><defs><radialGradient id="leo1"><stop offset="0%" stop-color="#d4a55a"/><stop offset="100%" stop-color="#a07030"/></radialGradient></defs><!-- Spots --><circle cx="55" cy="30" r="4" fill="rgba(0,0,0,0.25)"/><circle cx="72" cy="50" r="5" fill="rgba(0,0,0,0.2)"/><circle cx="40" cy="55" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="80" cy="75" r="4" fill="rgba(0,0,0,0.2)"/><circle cx="45" cy="80" r="5" fill="rgba(0,0,0,0.2)"/><circle cx="62" cy="95" r="3" fill="rgba(0,0,0,0.2)"/></svg></div>
+    <div class="leopard-star star-tr"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon points="50,4 61,36 95,36 68,55 78,88 50,68 22,88 32,55 5,36 39,36" fill="url(#leo2)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/><defs><radialGradient id="leo2"><stop offset="0%" stop-color="#c8964e"/><stop offset="100%" stop-color="#8a5e22"/></radialGradient></defs><circle cx="45" cy="25" r="3" fill="rgba(0,0,0,0.25)"/><circle cx="62" cy="42" r="4" fill="rgba(0,0,0,0.2)"/><circle cx="35" cy="50" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="65" cy="65" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="48" cy="75" r="4" fill="rgba(0,0,0,0.2)"/></svg></div>
+    <div class="leopard-star star-bl"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><polygon points="60,5 73,42 112,42 81,65 93,102 60,80 27,102 39,65 8,42 47,42" fill="url(#leo3)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/><defs><radialGradient id="leo3"><stop offset="0%" stop-color="#dab56a"/><stop offset="100%" stop-color="#9a7035"/></radialGradient></defs><circle cx="55" cy="30" r="4" fill="rgba(0,0,0,0.25)"/><circle cx="72" cy="50" r="5" fill="rgba(0,0,0,0.2)"/><circle cx="40" cy="55" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="80" cy="75" r="4" fill="rgba(0,0,0,0.2)"/><circle cx="45" cy="80" r="5" fill="rgba(0,0,0,0.2)"/><circle cx="62" cy="95" r="3" fill="rgba(0,0,0,0.2)"/></svg></div>
+
+    <!-- Bears SVG — brown + white hugging -->
+    <div class="bears-center">
+      <svg viewBox="0 0 280 240" xmlns="http://www.w3.org/2000/svg">
+        <!-- ---- BEAR 1 (brown, left) ---- -->
+        <g transform="translate(30,0)">
+          <!-- body -->
+          <ellipse cx="65" cy="170" rx="42" ry="52" fill="#7b4f2a"/>
+          <!-- arms wrapping right -->
+          <ellipse cx="100" cy="175" rx="22" ry="14" fill="#6a4022" transform="rotate(-20,100,175)"/>
+          <ellipse cx="108" cy="195" rx="18" ry="11" fill="#6a4022" transform="rotate(10,108,195)"/>
+          <!-- paws -->
+          <ellipse cx="115" cy="200" rx="10" ry="8" fill="#5a3018"/>
+          <!-- head -->
+          <circle cx="65" cy="105" r="38" fill="#7b4f2a"/>
+          <!-- ears -->
+          <circle cx="40" cy="74" r="16" fill="#7b4f2a"/>
+          <circle cx="40" cy="74" r="9" fill="#c49a78"/>
+          <circle cx="90" cy="74" r="16" fill="#7b4f2a"/>
+          <circle cx="90" cy="74" r="9" fill="#c49a78"/>
+          <!-- snout -->
+          <ellipse cx="65" cy="118" rx="18" ry="14" fill="#c49a78"/>
+          <!-- nose -->
+          <ellipse cx="65" cy="112" rx="7" ry="5" fill="#3a2010"/>
+          <!-- eyes -->
+          <circle cx="50" cy="100" r="6" fill="#1a0e06"/>
+          <circle cx="80" cy="100" r="6" fill="#1a0e06"/>
+          <circle cx="52" cy="98" r="2" fill="white"/>
+          <circle cx="82" cy="98" r="2" fill="white"/>
+          <!-- smile -->
+          <path d="M57 122 Q65 130 73 122" stroke="#3a2010" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- blush -->
+          <ellipse cx="42" cy="112" rx="8" ry="5" fill="rgba(220,80,80,0.35)"/>
+          <ellipse cx="88" cy="112" rx="8" ry="5" fill="rgba(220,80,80,0.35)"/>
+        </g>
+        <!-- ---- BEAR 2 (white, right) ---- -->
+        <g transform="translate(150,0)">
+          <!-- body -->
+          <ellipse cx="50" cy="170" rx="38" ry="50" fill="#f0ede8"/>
+          <!-- arm wrapping left -->
+          <ellipse cx="18" cy="175" rx="20" ry="13" fill="#ddd9d3" transform="rotate(20,18,175)"/>
+          <!-- paws -->
+          <ellipse cx="10" cy="198" rx="10" ry="8" fill="#ccc8c2"/>
+          <!-- head -->
+          <circle cx="50" cy="105" r="35" fill="#f0ede8"/>
+          <!-- ears -->
+          <circle cx="27" cy="76" r="14" fill="#f0ede8"/>
+          <circle cx="27" cy="76" r="8" fill="#e8c0c0"/>
+          <circle cx="73" cy="76" r="14" fill="#f0ede8"/>
+          <circle cx="73" cy="76" r="8" fill="#e8c0c0"/>
+          <!-- snout -->
+          <ellipse cx="50" cy="118" rx="16" ry="12" fill="#e8c0c0"/>
+          <!-- nose -->
+          <ellipse cx="50" cy="112" rx="6" ry="4.5" fill="#c080a0"/>
+          <!-- eyes -->
+          <circle cx="37" cy="100" r="6" fill="#1a0e06"/>
+          <circle cx="63" cy="100" r="6" fill="#1a0e06"/>
+          <circle cx="39" cy="98" r="2" fill="white"/>
+          <circle cx="65" cy="98" r="2" fill="white"/>
+          <!-- smile -->
+          <path d="M43 122 Q50 130 57 122" stroke="#c080a0" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- blush -->
+          <ellipse cx="28" cy="112" rx="7" ry="5" fill="rgba(220,80,80,0.3)"/>
+          <ellipse cx="72" cy="112" rx="7" ry="5" fill="rgba(220,80,80,0.3)"/>
+        </g>
+        <!-- Heart between them -->
+        <g transform="translate(118, 115)">
+          <path d="M22,8 C22,3 16,0 12,4 C8,0 2,3 2,8 C2,15 12,22 12,22 C12,22 22,15 22,8Z" fill="#e03030" opacity="0.9"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Polaroid photo -->
+    <div class="polaroid-frame">
+      <!-- ⬇️ SUBSTITUA A URL ABAIXO PELA FOTO DE VOCÊS -->
+      <img src="[COLOCAR_FOTO_AQUI]" alt="Nossa foto" onerror="this.style.background='#e8c0c0';this.style.display='block'"/>
+      <div class="polaroid-caption">nós dois 💕</div>
+    </div>
+
+    <!-- Scattered hearts -->
+    <div class="scatter-item" style="top:12%;left:45%;--rot:-10deg;animation-delay:0.3s">
+      <svg width="35" height="35" viewBox="0 0 35 35"><path d="M17.5,8 C17.5,3 11,0 7,5 C3,0 -3,3 -3,8..." fill="none"/><path d="M17.5,30 C17.5,30 3,20 3,11 C3,6 8,3 12,6 C14,7 17.5,10 17.5,10 C17.5,10 21,7 23,6 C27,3 32,6 32,11 C32,20 17.5,30 17.5,30Z" fill="#e05080" opacity="0.8"/></svg>
+    </div>
+    <div class="scatter-item" style="top:35%;left:50%;--rot:8deg;animation-delay:1s">
+      <svg width="25" height="25" viewBox="0 0 35 35"><path d="M17.5,30 C17.5,30 3,20 3,11 C3,6 8,3 12,6 C14,7 17.5,10 17.5,10 C17.5,10 21,7 23,6 C27,3 32,6 32,11 C32,20 17.5,30 17.5,30Z" fill="#ff8080" opacity="0.7"/></svg>
+    </div>
+    <div class="scatter-item" style="bottom:20%;left:38%;--rot:-5deg;animation-delay:0.7s">
+      <svg width="30" height="30" viewBox="0 0 35 35"><path d="M17.5,30 C17.5,30 3,20 3,11 C3,6 8,3 12,6 C14,7 17.5,10 17.5,10 C17.5,10 21,7 23,6 C27,3 32,6 32,11 C32,20 17.5,30 17.5,30Z" fill="#c03060" opacity="0.9"/></svg>
+    </div>
+    <!-- Small flowers -->
+    <div class="scatter-item" style="top:58%;right:26%;--rot:20deg;animation-delay:1.2s">
+      <svg width="32" height="32" viewBox="0 0 40 40"><g transform="translate(20,20)"><circle r="6" fill="#ffaacc"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(0)  translate(0,-9)"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(60) translate(0,-9)"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(120) translate(0,-9)"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(180) translate(0,-9)"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(240) translate(0,-9)"/><ellipse rx="7" ry="3" fill="#ffbbdd" transform="rotate(300) translate(0,-9)"/></g></svg>
+    </div>
+    <div class="scatter-item" style="top:15%;left:28%;--rot:-15deg;animation-delay:0.5s">
+      <svg width="28" height="28" viewBox="0 0 40 40"><g transform="translate(20,20)"><circle r="5" fill="#ffd700"/><ellipse rx="6" ry="3" fill="#ff9999" transform="rotate(0)  translate(0,-8)"/><ellipse rx="6" ry="3" fill="#ff9999" transform="rotate(72) translate(0,-8)"/><ellipse rx="6" ry="3" fill="#ff9999" transform="rotate(144) translate(0,-8)"/><ellipse rx="6" ry="3" fill="#ff9999" transform="rotate(216) translate(0,-8)"/><ellipse rx="6" ry="3" fill="#ff9999" transform="rotate(288) translate(0,-8)"/></g></svg>
+    </div>
+    <!-- Dice -->
+    <div class="scatter-item" style="top:45%;right:30%;--rot:15deg;animation-delay:0.9s">
+      <svg width="30" height="30" viewBox="0 0 30 30"><rect width="28" height="28" x="1" y="1" rx="4" fill="#f5f5f0" stroke="#ddd" stroke-width="1"/><circle cx="8" cy="8" r="2.5" fill="#333"/><circle cx="15" cy="15" r="2.5" fill="#333"/><circle cx="22" cy="22" r="2.5" fill="#333"/></svg>
+    </div>
+
+    <button class="next-btn" onclick="goToScreen(4)">próximo →</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 4 — LETTER
+     ============================================================ -->
+<div id="screen4" class="screen">
+  <div class="letter-layout">
+
+    <!-- Paper -->
+    <div class="letter-paper">
+      <div class="wax-seal"><span>[SUA_INICIAL]</span></div>
+
+      <div class="letter-from">From: [SEU_NOME] &nbsp;·&nbsp; For: Enzo</div>
+
+      <div class="letter-body">
+        <div class="dear">Enzo,</div>
+        <br>
+        Se eu pudesse embrulhar todo carinho que sinto por você numa caixa, ainda seria pequena.
+        <br><br>
+        Obrigado por ser meu lugar seguro, minha risada no fim do dia e minha pessoa favorita em qualquer rolê.
+        <br><br>
+        Que a gente continue colecionando momentos, planos bobos e abraços demorados. Você faz tudo ficar mais bonito.
+        <br><br>
+        Feliz Dia dos Namorados. Te amo muito.
+        <br>
+        <div class="sign">— [SEU_NOME] ♥</div>
+      </div>
+    </div>
+
+    <!-- Collage -->
+    <div class="letter-collage">
+      <!-- big spinning leopard star -->
+      <div class="collage-star-big">
+        <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="60,4 72,40 110,40 80,62 92,98 60,76 28,98 40,62 10,40 48,40" fill="url(#leo4)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+          <defs><radialGradient id="leo4"><stop offset="0%" stop-color="#d4a55a"/><stop offset="100%" stop-color="#9a7030"/></radialGradient></defs>
+          <circle cx="52" cy="28" r="3.5" fill="rgba(0,0,0,0.2)"/>
+          <circle cx="70" cy="48" r="4.5" fill="rgba(0,0,0,0.18)"/>
+          <circle cx="38" cy="52" r="3" fill="rgba(0,0,0,0.18)"/>
+          <circle cx="78" cy="72" r="4" fill="rgba(0,0,0,0.18)"/>
+          <circle cx="44" cy="78" r="4.5" fill="rgba(0,0,0,0.18)"/>
+        </svg>
+      </div>
+
+      <!-- Bouquet SVG -->
+      <div class="bouquet-container">
+        <svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+          <!-- Stems -->
+          <path d="M100 220 Q85 180 70 140" stroke="#2d6e2d" stroke-width="3" fill="none"/>
+          <path d="M100 220 Q100 180 100 145" stroke="#2d6e2d" stroke-width="3" fill="none"/>
+          <path d="M100 220 Q115 185 130 148" stroke="#2d6e2d" stroke-width="3" fill="none"/>
+          <path d="M100 220 Q88 185 78 160" stroke="#3a7a3a" stroke-width="2" fill="none"/>
+          <path d="M100 220 Q112 188 122 162" stroke="#3a7a3a" stroke-width="2" fill="none"/>
+          <!-- Leaves -->
+          <path d="M88 175 Q76 162 80 148 Q92 162 88 175Z" fill="#2d8c2d"/>
+          <path d="M112 178 Q124 165 120 151 Q108 165 112 178Z" fill="#2d8c2d"/>
+          <!-- Wrap -->
+          <path d="M72 235 Q100 220 128 235 Q130 265 100 280 Q70 265 72 235Z" fill="#2d5a2d"/>
+          <path d="M76 238 Q100 225 124 238 Q126 262 100 274 Q74 262 76 238Z" fill="#3a7a3a" opacity="0.6"/>
+          <!-- Bow -->
+          <ellipse cx="82" cy="230" rx="16" ry="8" fill="#e05030" transform="rotate(-25,82,230)"/>
+          <ellipse cx="118" cy="230" rx="16" ry="8" fill="#d04020" transform="rotate(25,118,230)"/>
+          <ellipse cx="100" cy="232" rx="9" ry="6" fill="#f06040"/>
+          <!-- Rose 1 (center, red) -->
+          <g transform="translate(100,115)">
+            <circle r="18" fill="#cc0000"/>
+            <path d="M0,-16 Q8,-10 6,0 Q0,6 -6,0 Q-8,-10 0,-16Z" fill="#e00000"/>
+            <path d="M14,-8 Q16,4 8,10 Q2,6 4,0 Q8,-8 14,-8Z" fill="#bb0000"/>
+            <path d="M-14,-8 Q-16,4 -8,10 Q-2,6 -4,0 Q-8,-8 -14,-8Z" fill="#bb0000"/>
+            <path d="M14,6 Q10,18 0,20 Q-4,14 0,10 Q8,8 14,6Z" fill="#aa0000"/>
+            <path d="M-14,6 Q-10,18 0,20 Q4,14 0,10 Q-8,8 -14,6Z" fill="#aa0000"/>
+            <circle r="6" fill="#cc2020"/>
+          </g>
+          <!-- Rose 2 (left, orange) -->
+          <g transform="translate(70,130)">
+            <circle r="15" fill="#d06010"/>
+            <path d="M0,-13 Q7,-8 5,0 Q0,5 -5,0 Q-7,-8 0,-13Z" fill="#e07020"/>
+            <path d="M12,-6 Q13,4 6,9 Q1,5 3,0 Q7,-6 12,-6Z" fill="#c05010"/>
+            <path d="M-12,-6 Q-13,4 -6,9 Q-1,5 -3,0 Q-7,-6 -12,-6Z" fill="#c05010"/>
+            <path d="M12,5 Q8,15 0,17 Q-3,12 0,8 Q6,6 12,5Z" fill="#b04008"/>
+            <path d="M-12,5 Q-8,15 0,17 Q3,12 0,8 Q-6,6 -12,5Z" fill="#b04008"/>
+            <circle r="5" fill="#e08030"/>
+          </g>
+          <!-- Rose 3 (right, red) -->
+          <g transform="translate(130,132)">
+            <circle r="14" fill="#b80000"/>
+            <path d="M0,-12 Q6,-7 4,0 Q0,5 -4,0 Q-6,-7 0,-12Z" fill="#d00000"/>
+            <path d="M11,-5 Q12,4 6,8 Q1,5 3,0 Q6,-5 11,-5Z" fill="#a80000"/>
+            <path d="M-11,-5 Q-12,4 -6,8 Q-1,5 -3,0 Q-6,-5 -11,-5Z" fill="#a80000"/>
+            <circle r="5" fill="#c02020"/>
+          </g>
+          <!-- Small orange rose back-left -->
+          <g transform="translate(78,148)">
+            <circle r="11" fill="#e07015"/>
+            <path d="M0,-9 Q5,-5 3.5,0 Q0,4 -3.5,0 Q-5,-5 0,-9Z" fill="#f08020"/>
+            <circle r="4" fill="#e09035"/>
+          </g>
+          <!-- Small bud right -->
+          <g transform="translate(122,152)">
+            <circle r="10" fill="#c80000"/>
+            <path d="M0,-8 Q4,-4 3,0 Q0,4 -3,0 Q-4,-4 0,-8Z" fill="#e00000"/>
+            <circle r="3.5" fill="#cc2020"/>
+          </g>
+        </svg>
+      </div>
+
+      <button class="next-btn l4-next-btn" onclick="goToScreen(5)">próximo →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     SCREEN 5 — CATS
+     ============================================================ -->
+<div id="screen5" class="screen">
+  <div class="s5-hearts" id="floatingHearts"></div>
+
+  <!-- Leopard star corners -->
+  <div style="position:absolute;top:2%;left:2%;width:clamp(55px,11vw,90px);animation:fadeInDown 1s ease 0.3s both;pointer-events:none;">
+    <svg viewBox="0 0 100 100"><polygon points="50,4 61,36 95,36 68,55 78,88 50,68 22,88 32,55 5,36 39,36" fill="url(#leo5)"/><defs><radialGradient id="leo5"><stop offset="0%" stop-color="#d4a55a"/><stop offset="100%" stop-color="#9a6e28"/></radialGradient></defs><circle cx="42" cy="22" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="58" cy="40" r="3.5" fill="rgba(0,0,0,0.18)"/><circle cx="35" cy="48" r="2.5" fill="rgba(0,0,0,0.18)"/></svg>
+  </div>
+  <div style="position:absolute;top:2%;right:2%;width:clamp(55px,11vw,90px);animation:fadeInDown 1s ease 0.4s both;pointer-events:none;">
+    <svg viewBox="0 0 100 100"><polygon points="50,4 61,36 95,36 68,55 78,88 50,68 22,88 32,55 5,36 39,36" fill="url(#leo6)"/><defs><radialGradient id="leo6"><stop offset="0%" stop-color="#c8964a"/><stop offset="100%" stop-color="#8a5e22"/></radialGradient></defs><circle cx="45" cy="24" r="3" fill="rgba(0,0,0,0.2)"/><circle cx="60" cy="42" r="3.5" fill="rgba(0,0,0,0.18)"/></svg>
+  </div>
+
+  <!-- Cats SVG -->
+  <div class="cats-container">
+    <svg width="clamp(220px,55vw,340px)" viewBox="0 0 280 220" xmlns="http://www.w3.org/2000/svg">
+      <!-- ---- CAT 1 (black, left) ---- -->
+      <g>
+        <!-- body -->
+        <ellipse cx="85" cy="165" rx="48" ry="55" fill="#1a1a1a"/>
+        <!-- arm reaching right -->
+        <path d="M118 155 Q148 150 160 170 Q148 175 125 172Z" fill="#111"/>
+        <!-- paw -->
+        <ellipse cx="158" cy="172" rx="12" ry="9" fill="#222"/>
+        <!-- tail -->
+        <path d="M45 190 Q10 200 15 220 Q25 215 40 205 Q50 198 55 192Z" fill="#1a1a1a"/>
+        <!-- head -->
+        <circle cx="85" cy="100" r="42" fill="#1a1a1a"/>
+        <!-- ears -->
+        <polygon points="55,65 45,35 72,55" fill="#1a1a1a"/>
+        <polygon points="58,63 52,42 68,56" fill="#c08090"/>
+        <polygon points="115,65 125,35 98,55" fill="#1a1a1a"/>
+        <polygon points="112,63 118,42 102,56" fill="#c08090"/>
+        <!-- snout -->
+        <ellipse cx="85" cy="114" rx="14" ry="10" fill="#2a2a2a"/>
+        <!-- nose -->
+        <ellipse cx="85" cy="110" rx="5" ry="3.5" fill="#e890a0"/>
+        <!-- eyes (green) -->
+        <ellipse cx="70" cy="96" rx="9" ry="10" fill="#111"/>
+        <ellipse cx="70" cy="96" rx="7" ry="8.5" fill="#2db050"/>
+        <ellipse cx="70" cy="96" rx="3" ry="6" fill="#111"/>
+        <circle cx="72" cy="93" r="2" fill="white"/>
+        <ellipse cx="100" cy="96" rx="9" ry="10" fill="#111"/>
+        <ellipse cx="100" cy="96" rx="7" ry="8.5" fill="#2db050"/>
+        <ellipse cx="100" cy="96" rx="3" ry="6" fill="#111"/>
+        <circle cx="102" cy="93" r="2" fill="white"/>
+        <!-- whiskers -->
+        <line x1="40" y1="112" x2="72" y2="114" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+        <line x1="38" y1="118" x2="72" y2="117" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+        <line x1="98" y1="114" x2="130" y2="112" stroke="rgba(255,255,255,0.6)" stroke-width="1.2"/>
+        <line x1="98" y1="117" x2="132" y2="118" stroke="rgba(255,255,255,0.5)" stroke-width="1.2"/>
+        <!-- smile -->
+        <path d="M79 118 Q85 125 91 118" stroke="#e890a0" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- blush -->
+        <ellipse cx="60" cy="110" rx="7" ry="5" fill="rgba(220,80,100,0.3)"/>
+        <ellipse cx="110" cy="110" rx="7" ry="5" fill="rgba(220,80,100,0.3)"/>
+      </g>
+      <!-- ---- CAT 2 (white, right) ---- -->
+      <g>
+        <!-- body -->
+        <ellipse cx="195" cy="165" rx="48" ry="55" fill="#f4f0ec"/>
+        <!-- arm reaching left -->
+        <path d="M162 155 Q132 150 120 170 Q132 175 155 172Z" fill="#e8e4e0"/>
+        <!-- paw -->
+        <ellipse cx="122" cy="172" rx="12" ry="9" fill="#e0dcd8"/>
+        <!-- tail -->
+        <path d="M235 190 Q270 200 265 220 Q255 215 240 205 Q230 198 225 192Z" fill="#f0ece8"/>
+        <!-- head -->
+        <circle cx="195" cy="100" r="42" fill="#f4f0ec"/>
+        <!-- ears -->
+        <polygon points="165,65 155,35 182,55" fill="#f4f0ec"/>
+        <polygon points="168,63 162,42 178,56" fill="#f0b0c0"/>
+        <polygon points="225,65 235,35 208,55" fill="#f4f0ec"/>
+        <polygon points="222,63 228,42 212,56" fill="#f0b0c0"/>
+        <!-- snout -->
+        <ellipse cx="195" cy="114" rx="14" ry="10" fill="#ede9e5"/>
+        <!-- nose -->
+        <ellipse cx="195" cy="110" rx="5" ry="3.5" fill="#e06080"/>
+        <!-- eyes (blue) -->
+        <ellipse cx="180" cy="96" rx="9" ry="10" fill="#c0d0f0"/>
+        <ellipse cx="180" cy="96" rx="7" ry="8.5" fill="#4080d0"/>
+        <ellipse cx="180" cy="96" rx="3" ry="6" fill="#111"/>
+        <circle cx="182" cy="93" r="2" fill="white"/>
+        <ellipse cx="210" cy="96" rx="9" ry="10" fill="#c0d0f0"/>
+        <ellipse cx="210" cy="96" rx="7" ry="8.5" fill="#4080d0"/>
+        <ellipse cx="210" cy="96" rx="3" ry="6" fill="#111"/>
+        <circle cx="212" cy="93" r="2" fill="white"/>
+        <!-- whiskers -->
+        <line x1="150" y1="112" x2="182" y2="114" stroke="rgba(150,130,130,0.5)" stroke-width="1.2"/>
+        <line x1="148" y1="118" x2="182" y2="117" stroke="rgba(150,130,130,0.45)" stroke-width="1.2"/>
+        <line x1="208" y1="114" x2="240" y2="112" stroke="rgba(150,130,130,0.5)" stroke-width="1.2"/>
+        <line x1="208" y1="117" x2="242" y2="118" stroke="rgba(150,130,130,0.45)" stroke-width="1.2"/>
+        <!-- smile -->
+        <path d="M189 118 Q195 125 201 118" stroke="#e06080" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <!-- blush -->
+        <ellipse cx="170" cy="110" rx="7" ry="5" fill="rgba(220,80,100,0.25)"/>
+        <ellipse cx="220" cy="110" rx="7" ry="5" fill="rgba(220,80,100,0.25)"/>
+      </g>
+      <!-- Heart above -->
+      <g transform="translate(140, 55)">
+        <path d="M0,-14 C-1,-20 -12,-20 -12,-10 C-12,-3 0,6 0,6 C0,6 12,-3 12,-10 C12,-20 1,-20 0,-14Z" fill="#e03050" opacity="0.9"/>
+      </g>
+      <!-- Small hearts -->
+      <g transform="translate(50, 75)">
+        <path d="M0,-8 C-0.5,-12 -7,-12 -7,-6 C-7,-2 0,4 0,4 C0,4 7,-2 7,-6 C7,-12 0.5,-12 0,-8Z" fill="#ff6080" opacity="0.7"/>
+      </g>
+      <g transform="translate(230, 70)">
+        <path d="M0,-8 C-0.5,-12 -7,-12 -7,-6 C-7,-2 0,4 0,4 C0,4 7,-2 7,-6 C7,-12 0.5,-12 0,-8Z" fill="#ff6080" opacity="0.7"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="s5-title-box">
+    <div class="s5-main-text">Grow your own garden</div>
+  </div>
+
+  <div class="s5-sub">Made with love by [SEU_NOME] ♥</div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ---- State ---- */
+let currentScreen = 1;
+const totalScreens = 5;
+
+/* ---- Screen navigation ---- */
+function goToScreen(n) {
+  const prev = document.getElementById('screen' + currentScreen);
+  const next = document.getElementById('screen' + n);
+  if (!next || n === currentScreen) return;
+
+  prev.classList.remove('active');
+  next.classList.add('active');
+  currentScreen = n;
+
+  if (n === 5) initFloatingHearts();
+}
+
+/* ---- Screen 2: auto-advance ---- */
+function startScreen2() {
+  document.getElementById('screen2').classList.add('active');
+
+  // Spawn CSS flower particles
+  const boom = document.getElementById('flowerBoom');
+  boom.innerHTML = '';
+  const flowerEmojis = ['🌸','🌺','🌹','🌷','🌼','💮','🏵️','🌻'];
+  for (let i = 0; i < 120; i++) {
+    const el = document.createElement('div');
+    el.textContent = flowerEmojis[Math.floor(Math.random() * flowerEmojis.length)];
+    const angle = Math.random() * 360;
+    const dist = 30 + Math.random() * 120;
+    const dx = Math.cos(angle * Math.PI / 180) * dist;
+    const dy = Math.sin(angle * Math.PI / 180) * dist;
+    el.style.cssText = `
+      position: absolute;
+      font-size: ${14 + Math.random() * 28}px;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: flowerFly 1.8s ease-out ${Math.random() * 0.5}s both;
+      --dx: ${dx}vw; --dy: ${dy}vh;
+      pointer-events: none;
+    `;
+    boom.appendChild(el);
+  }
+
+  setTimeout(() => {
+    const bt = document.getElementById('boomText');
+    bt.style.display = 'block';
+  }, 600);
+
+  setTimeout(() => {
+    const s2 = document.getElementById('screen2');
+    s2.style.transition = 'opacity 1.2s ease';
+    s2.style.opacity = '0';
+    setTimeout(() => {
+      s2.classList.remove('active');
+      s2.style.opacity = '';
+      s2.style.transition = '';
+      goToScreen(3);
+    }, 1200);
+  }, 2600);
+}
+
+/* ---- Gift click ---- */
+document.getElementById('giftBox').addEventListener('click', () => {
+  const box = document.getElementById('giftBox');
+  box.classList.add('opening');
+  launchParticles();
+  setTimeout(() => {
+    const s1 = document.getElementById('screen1');
+    s1.style.transition = 'opacity 0.6s ease';
+    s1.style.opacity = '0';
+    setTimeout(() => {
+      s1.classList.remove('active');
+      s1.style.opacity = '';
+      s1.style.transition = '';
+      currentScreen = 2;
+      startScreen2();
+    }, 600);
+  }, 700);
+});
+
+/* ---- Canvas particles (gift open burst) ---- */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let animFrame;
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function launchParticles() {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  const colors = ['#ff4060','#ff8099','#ffb3c6','#ffd700','#ffffff','#ff6b6b','#ffaacc'];
+  for (let i = 0; i < 200; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 3 + Math.random() * 12;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 4,
+      alpha: 1,
+      size: 4 + Math.random() * 8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: Math.random() > 0.5 ? 'heart' : 'circle',
+      gravity: 0.15 + Math.random() * 0.2
+    });
+  }
+  cancelAnimationFrame(animFrame);
+  animateParticles();
+}
+
+function drawHeart(x, y, size, color, alpha) {
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.translate(x, y);
+  ctx.beginPath();
+  ctx.moveTo(0, -size * 0.5);
+  ctx.bezierCurveTo(size * 0.5, -size, size, -size * 0.4, size * 0.5, size * 0.2);
+  ctx.bezierCurveTo(0, size * 0.7, 0, size * 0.7, 0, size * 0.7);
+  ctx.bezierCurveTo(0, size * 0.7, 0, size * 0.7, -size * 0.5, size * 0.2);
+  ctx.bezierCurveTo(-size, -size * 0.4, -size * 0.5, -size, 0, -size * 0.5);
+  ctx.fill();
+  ctx.restore();
+}
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.alpha > 0.02);
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += p.gravity;
+    p.alpha -= 0.012;
+    p.vx *= 0.98;
+    if (p.shape === 'heart') {
+      drawHeart(p.x, p.y, p.size, p.color, Math.max(0, p.alpha));
+    } else {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  });
+  if (particles.length > 0) animFrame = requestAnimationFrame(animateParticles);
+  else ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+/* ---- Floating hearts screen 5 ---- */
+function initFloatingHearts() {
+  const container = document.getElementById('floatingHearts');
+  container.innerHTML = '';
+  const colors = ['#ff4060','#ff8099','#ffb3c6','#ffd700','#ff6b6b'];
+  for (let i = 0; i < 30; i++) {
+    const div = document.createElement('div');
+    div.textContent = ['♥','❤','💕','💗','💖'][Math.floor(Math.random() * 5)];
+    div.style.cssText = `
+      position: absolute;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      font-size: ${10 + Math.random() * 20}px;
+      color: ${colors[Math.floor(Math.random() * colors.length)]};
+      opacity: ${0.3 + Math.random() * 0.5};
+      animation: floatGently ${3 + Math.random() * 4}s ease-in-out infinite;
+      animation-delay: ${Math.random() * 3}s;
+      pointer-events: none;
+    `;
+    container.appendChild(div);
+  }
+}
+
+/* ---- Click to advance screens 3, 4, 5 (not on buttons) ---- */
+[3,4,5].forEach(n => {
+  document.getElementById('screen' + n).addEventListener('click', function(e) {
+    if (e.target.classList.contains('next-btn')) return; // handled by onclick
+    if (n < 5) goToScreen(n + 1);
+  });
+});
+</script>
+
+<!-- Keyframe for flower particles -->
+<style>
+@keyframes flowerFly {
+  0%   { transform: translate(-50%,-50%) scale(0.2); opacity: 0; }
+  30%  { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1); opacity: 0; }
+}
+</style>
+
+</body>
+</html>
